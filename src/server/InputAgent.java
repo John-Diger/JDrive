@@ -1,3 +1,5 @@
+package server;
+
 import java.util.Scanner;
 
 public class InputAgent {

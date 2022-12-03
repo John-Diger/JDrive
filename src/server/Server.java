@@ -1,3 +1,5 @@
+package server;
+
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -28,7 +30,6 @@ public class Server implements Runnable {
             byte[] buffer = new byte[10000000];
             DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
             datagramSocket.send(datagramPacket);
-
         } catch (SocketException | FileNotFoundException exception) {
             exception.printStackTrace();
         } catch (IOException e) {
@@ -38,7 +39,10 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        uploader();
-        downloader();
+        System.out.println("파일을 업로드하실꺼에여 아님 다운로드하실꺼에여");
+        while (true) {
+            uploader();
+            downloader();
+        }
     }
 }
