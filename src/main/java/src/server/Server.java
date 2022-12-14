@@ -1,7 +1,7 @@
 package src.server;
 
-import dao.BucketDao;
-import dto.ResponseDto.FindAllForm;
+import src.dao.BucketDao;
+import src.dto.ResponseDto.FindAllForm;
 import src.ioagent.InputAgent;
 import src.ioagent.OutputAgent;
 
@@ -35,10 +35,12 @@ public class Server {
     public void download() {
         try (DatagramSocket datagramSocket = new DatagramSocket(new InetSocketAddress("127.0.0.1", 8080))) {
             List<FindAllForm> loadedAll = bucketDao.findAll();
-            File dir = new File("E:\\Priority\\Study\\NetworkProgramming-JDrive\\JDrive\\resources");
+            File dir = new File("E:\\Priority\\Study\\NetworkProgramming-JDrive\\JDrive\\resources\\shared");
             for (FindAllForm findAllForm : loadedAll) {
                 File test = (File) findAllForm.getLoadedFile();
+                System.out.println("test = " + test);
             }
+
             File[] files = dir.listFiles();
             int filesLength = Objects.requireNonNull(files).length;
             outputAgent.loadSharedFolderList(files, filesLength);

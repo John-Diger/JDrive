@@ -8,7 +8,8 @@ public class ConnectionManagerImpl implements ConnectionManager {
 
     @Override
     public Connection makeConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
+//        Class.forName("com.mysql.jdbc.Driver"); --> Deprecated Driver
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/jdrive", "root", "112233");
     }
 }

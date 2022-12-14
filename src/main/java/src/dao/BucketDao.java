@@ -21,11 +21,8 @@ public class BucketDao {
         List<FindAllForm> result = new ArrayList<>();
         try {
             String query = "SELECT * FROM bucket";
-            ResultSet resultSet;
-
-            try (PreparedStatement statement = connectionManager.makeConnection().prepareStatement(query)) {
-                resultSet = statement.executeQuery(query);
-            }
+            PreparedStatement statement = connectionManager.makeConnection().prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 FindAllForm loaded = new FindAllForm();
@@ -35,7 +32,6 @@ public class BucketDao {
                 loaded.setStatus(resultSet.getBoolean("status"));
                 result.add(loaded);
             }
-            resultSet.close();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -1,7 +1,7 @@
 package src;
 
-import dao.BucketDao;
-import server.Server;
+import src.dao.BucketDao;
+import src.server.Server;
 
 public class JDriveApplication {
 
