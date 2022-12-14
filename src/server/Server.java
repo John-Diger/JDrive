@@ -1,5 +1,6 @@
 package server;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,7 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.Objects;
 
-public class Server implements Runnable {
+public class Server extends JFrame implements Runnable {
 
     InputAgent inputAgent = new InputAgent();
     PrintAgent printAgent = new PrintAgent();

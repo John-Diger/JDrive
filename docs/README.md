@@ -31,3 +31,12 @@ Multi Thread
 4. 소켓에 전송된 데이터 수신 후 저장
    1. 업로드 요청한 파일의 확장자에 맞추어 저장한다.
 6. 다운로드 요청이 오면 저장된 파일을 전송한다. (소켓 연결 활용)
+
+---
+
+# 교수님 사용법
+
+## 준비사항
+- Java 11
+- MySQL Driver (create schema name is **jdrive**)
+- IDE (Intellij)
