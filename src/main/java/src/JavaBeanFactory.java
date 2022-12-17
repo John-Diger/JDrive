@@ -1,38 +1,42 @@
 package src;
 
 
-import src.dao.BucketDao;
-import src.dao.ConnectionManager;
-import src.dao.ConnectionManagerImpl;
-import src.ioagent.InputAgent;
-import src.ioagent.OutputAgent;
-import src.server.Server;
+import src.professor.ProfessorRepository;
+import src.professor.ProfessorRepositoryImpl;
 
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class JavaBeanFactory {
 
-    public BucketDao getBucketDao() {
-        return new BucketDao(getConnectionManager(), getLogger());
-    }
+////    public ProfessorRepository getBucketDao() {
+////        return new ProfessorRepository(getConnectionManager(), getLogger());
+////    }
+//
+//    public ConnectionManager getConnectionManager() {
+//        return new ConnectionManagerImpl();
+//    }
+//
+//    public Logger getLogger() {
+//        return Logger.getGlobal();
+//    }
+//
+//    public InputAgent getInputAgent() {
+//        return new InputAgent();
+//    }
+//
+//    public ProfessorController getOutputAgent() {
+//        return new ProfessorController();
+//    }
+//
+//    public ProfessorServer getServer() {
+//        return new ProfessorServer(getInputAgent(), getOutputAgent(), getBucketDao());
+//    }
 
-    public ConnectionManager getConnectionManager() {
-        return new ConnectionManagerImpl();
-    }
 
-    public Logger getLogger() {
-        return Logger.getGlobal();
-    }
-
-    public InputAgent getInputAgent() {
-        return new InputAgent();
-    }
-
-    public OutputAgent getOutputAgent() {
-        return new OutputAgent();
-    }
-
-    public Server getServer() {
-        return new Server(getInputAgent(), getOutputAgent(), getBucketDao());
+    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/jdrive", "root", "112233");
     }
 }
