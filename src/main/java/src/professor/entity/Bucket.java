@@ -5,10 +5,19 @@ import java.time.LocalDateTime;
 public class Bucket {
 
     private long id;
+    private String name;
     private byte[] sharedFile;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean status;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public byte[] getSharedFile() {
         return sharedFile;

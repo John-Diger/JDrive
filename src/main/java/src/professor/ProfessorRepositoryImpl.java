@@ -18,13 +18,14 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
 
     @Override
     public void insert(Object file) throws IOException {
-        final String query = "INSERT INTO bucket(shared_file, created_at, modified_at, status) VALUES(?,?,?,?)";
+        final String query = "INSERT INTO bucket(name shared_file, created_at, modified_at, status) VALUES(?,?,?,?)";
         byte[] fileToByteArray = FileUtils.readFileToByteArray((File) file);
         try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
-            preparedStatement.setBytes(1, fileToByteArray);
-            preparedStatement.setDate(2, new Date(System.currentTimeMillis()));
+            preparedStatement.setString(1, ((File) file).getName());
+            preparedStatement.setBytes(2, fileToByteArray);
             preparedStatement.setDate(3, new Date(System.currentTimeMillis()));
-            preparedStatement.setBoolean(4, Boolean.TRUE);
+            preparedStatement.setDate(4, new Date(System.currentTimeMillis()));
+            preparedStatement.setBoolean(5, Boolean.TRUE);
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
