@@ -1,5 +1,6 @@
 package src.professor;
 
+import src.ExtractedContent;
 import src.Method;
 import src.RequestForm;
 import src.ResponseAllListForm;
@@ -61,8 +62,10 @@ public class ProfessorServer {
                 } else if (requestForm.getMethod().equals(Method.GET_LIST)) {
                     try {
                         objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-                        // ResponseAllListForm all = professorRepository.findAll();
-                        objectOutputStream.writeObject(new ResponseAllListForm());
+                        ResponseAllListForm all = professorRepository.findAll();
+                        for (ExtractedContent extractedContent : all.getExtractedContents()) {
+                            objectOutputStream.writeObject(extractedContent);
+                        }
                         objectOutputStream.flush();
                         printWriter.write("ok");
                         printWriter.close();

@@ -1,5 +1,6 @@
 package src.student;
 
+import src.ExtractedContent;
 import src.Method;
 import src.RequestForm;
 import src.ResponseAllListForm;
@@ -9,6 +10,8 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentService {
 
@@ -36,15 +39,21 @@ public class StudentService {
             objectOutputStream.flush(); // 직렬화된 데이터 전달
 
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
-            ResponseAllListForm responseForm = (ResponseAllListForm) objectInputStream.readObject();
-            // readObject는 object 객체로 불러오기 때문에 형변화해야 합니다.
-            System.out.println(responseForm.toString());
+            List<ExtractedContent> list = new ArrayList<>();
+            try {
+                ExtractedContent content = (ExtractedContent)objectInputStream.readObject();
+                list.add(content);
+            } catch (EOFException e) {
+                System.out.println("111");
+            }
 
             // printWriter.write("ok");
             // printWriter.close(); // close() or flush()를 해줘야지 전해진다
             clientSocket.close(); // 여기서 socket 접속이 끊어져야 클라이언트가 종료가 됩니다.
 
-            return responseForm;
+            ResponseAllListForm responseAllListForm = new ResponseAllListForm();
+            responseAllListForm.setExtractedContents(list);
+            return responseAllListForm;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
