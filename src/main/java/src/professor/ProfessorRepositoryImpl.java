@@ -3,7 +3,7 @@ package src.professor;
 import org.apache.commons.io.FileUtils;
 import src.ConnectionManager;
 import src.ExtractedContent;
-import src.ResponseForm;
+import src.ResponseAllListForm;
 import src.professor.entity.Bucket;
 
 import java.io.File;
@@ -35,8 +35,8 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public ResponseForm findAll() {
-        ResponseForm responseForm = new ResponseForm();
+    public ResponseAllListForm findAll() {
+        ResponseAllListForm responseAllListForm = new ResponseAllListForm();
         List<ExtractedContent> extractedContents = new ArrayList<>();
         String query = "SELECT * FROM bucket";
         try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
@@ -48,17 +48,19 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
                 extractedContents.add(extractedContent);
                 resultSet.close();
             }
-            responseForm.setExtractedContents(extractedContents);
+            responseAllListForm.setExtractedContents(extractedContents);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        responseForm.setExtractedContents(extractedContents);
-        return responseForm;
+        responseAllListForm.setExtractedContents(extractedContents);
+        return responseAllListForm;
     }
 
     @Override
-    public Bucket findById(long id) {
+    public ResponseAllListForm findById(long id) {
         Bucket bucket = new Bucket();
+        ResponseAllListForm responseAllListForm = new ResponseAllListForm();
+        ExtractedContent extractedContent = new ExtractedContent();
         String query = "SELECT * FROM bucket WHERE id = ?";
         try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
             ResultSet resultSet;
@@ -74,6 +76,6 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return bucket;
+        return responseAllListForm;
     }
 }

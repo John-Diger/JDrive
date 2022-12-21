@@ -1,27 +1,24 @@
 package src.professor;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import src.Method;
+import src.RequestForm;
+import src.ResponseAllListForm;
+import src.ioagent.OutputAgent;
+
+import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import src.Method;
-import src.RequestForm;
-import src.ioagent.OutputAgent;
-
 public class ProfessorServer {
 
-     private final ProfessorRepository professorRepository = new ProfessorRepositoryImpl();
+    private final ProfessorRepository professorRepository = new ProfessorRepositoryImpl();
     private final OutputAgent outputAgent = new OutputAgent();
 
+    ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream; // Class의 객체를 읽어올때 사용
     PrintWriter printWriter; // 값을 전달할때 사용
-
     ServerSocket serverSocket;
 
     Socket clientSocket;
@@ -61,16 +58,20 @@ public class ProfessorServer {
                     System.out.println("사용자 업로드 요청 처리 중" + requestForm.getMethod());
                     professorRepository.insert(requestForm.getData());
                     System.out.println("업로드 완료" + requestForm.getMethod());
+                } else if (requestForm.getMethod().equals(Method.GET_LIST)) {
+                    try {
+                        objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+                        ResponseAllListForm all = professorRepository.findAll();
+                        objectOutputStream.writeObject(all);
+                        objectOutputStream.flush();
+                        printWriter.write("ok");
+                        printWriter.close();
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-                else if (requestForm.getMethod().equals(Method.DOWNLOAD)) {
-                    outputAgent.printSharedFolder(professorRepository.findAll());
-                    System.out.println("사용자 다운로드 요청 처리 중" + requestForm.getMethod());
-                    professorRepository.findById((Long) requestForm.getData());
-                    System.out.println("다운로드 완료" + requestForm.getMethod());
-                }
-                printWriter.write("ok");
-                printWriter.close(); // close() or flush()를 해줘야지 전해진다
-                clientSocket.close(); // 여기서 socket 접속이 끊어져야 클라이언트가 종료가 됩니다.
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (ClassNotFoundException e) {

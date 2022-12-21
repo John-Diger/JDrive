@@ -1,20 +1,11 @@
 package src.student;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Optional;
 
 import src.Method;
 import src.RequestForm;
-import src.ResponseForm;
+import src.ResponseAllListForm;
 import src.ioagent.InputAgent;
 import src.ioagent.InputValidator;
 import src.ioagent.OutputAgent;
@@ -73,8 +64,8 @@ public class StudentClient {
     private void readFilesInformation() {
         studentService.connect();
         RequestForm requestForm = studentService.readFileListInServer();
-        ResponseForm responseForm = (ResponseForm)requestForm.getData();
-        outputAgent.printSharedFolder(responseForm);
+        ResponseAllListForm responseAllListForm = (ResponseAllListForm)requestForm.getData();
+        outputAgent.printSharedFolder(responseAllListForm);
     }
     private void download() {
         outputAgent.printInputGuideRequestFile();

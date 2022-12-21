@@ -2,7 +2,7 @@ package src;
 
 import java.util.List;
 
-public class ResponseForm {
+public class ResponseAllListForm {
 
     List<ExtractedContent> extractedContents;
 

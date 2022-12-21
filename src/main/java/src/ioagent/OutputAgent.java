@@ -1,7 +1,7 @@
 package src.ioagent;
 
 import src.ExtractedContent;
-import src.ResponseForm;
+import src.ResponseAllListForm;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ public class OutputAgent {
         System.out.print("업로드 할 파일의 절대 경로를 입력해주세요 : ");
     }
 
-    public void printSharedFolder(ResponseForm responseForm) {
+    public void printSharedFolder(ResponseAllListForm responseAllListForm) {
         System.out.println("\n                  [!] 공유 폴더 내 파일 목록을 불러옵니다. [!]\n");
         System.out.println("| INDEX |                                | FilePath |");
-        List<ExtractedContent> extractedContents = responseForm.getExtractedContents();
+        List<ExtractedContent> extractedContents = responseAllListForm.getExtractedContents();
         for (int i = 0; i < extractedContents.size(); i++) {
             System.out.println("| " + extractedContents.get(i).getId() + " | " + extractedContents.get(i).getName() + " | ");
             System.out.println("-----");
