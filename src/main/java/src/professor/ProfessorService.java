@@ -4,6 +4,9 @@ import src.ioagent.InputAgent;
 import src.ioagent.OutputAgent;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ProfessorService {
 
@@ -17,7 +20,15 @@ public class ProfessorService {
         this.professorRepository = professorRepository;
     }
 
-    // public File executeDownload(long id, String userDownloadPath) {
-    //     return professorRepository.findById(id).getSharedFile();
-    // }
+//    public File executeDownload(long id) {
+//        FileOutputStream fos = new FileOutputStream("pathname")
+//        try (FileOutputStream fos = new FileOutputStream("pathname")) {
+//            fos.write(professorRepository.findById(id).getSharedFile());
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return fos;
+//    }
 }

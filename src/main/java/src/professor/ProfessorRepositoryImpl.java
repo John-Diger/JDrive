@@ -18,7 +18,7 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
 
     @Override
     public void insert(Object file) throws IOException {
-        final String query = "INSERT INTO bucket(name shared_file, created_at, modified_at, status) VALUES(?,?,?,?)";
+        final String query = "INSERT INTO bucket(name, shared_file, created_at, modified_at, status) VALUES(?,?,?,?,?)";
         byte[] fileToByteArray = FileUtils.readFileToByteArray((File) file);
         try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
             preparedStatement.setString(1, ((File) file).getName());

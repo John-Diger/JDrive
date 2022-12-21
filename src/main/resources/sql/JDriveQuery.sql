@@ -1,5 +1,6 @@
 create table bucket (
 	id bigint auto_increment primary key,
+    name text,
     shared_file longblob,
     created_at datetime,
     modified_at datetime,

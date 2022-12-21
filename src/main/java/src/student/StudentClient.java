@@ -64,6 +64,7 @@ public class StudentClient {
     private void upload() {
         outputAgent.printUploadGuide();
         String absolutePath = inputAgent.execute();
+        studentService.connect();
         studentService.uploadProcess(absolutePath);
     }
 
