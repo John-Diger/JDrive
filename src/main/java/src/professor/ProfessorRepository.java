@@ -1,14 +1,14 @@
 package src.professor;
 
+import src.ResponseForm;
 import src.professor.entity.Bucket;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface ProfessorRepository {
     void insert(Object file) throws IOException;
 
-    List<Bucket> findAll();
+    ResponseForm findAll();
 
     Bucket findById(long id);
 }
