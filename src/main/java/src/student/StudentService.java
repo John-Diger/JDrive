@@ -40,8 +40,8 @@ public class StudentService {
             // readObject는 object 객체로 불러오기 때문에 형변화해야 합니다.
             System.out.println(responseForm.toString());
 
-            printWriter.write("ok");
-            printWriter.close(); // close() or flush()를 해줘야지 전해진다
+            // printWriter.write("ok");
+            // printWriter.close(); // close() or flush()를 해줘야지 전해진다
             clientSocket.close(); // 여기서 socket 접속이 끊어져야 클라이언트가 종료가 됩니다.
 
             return responseForm;

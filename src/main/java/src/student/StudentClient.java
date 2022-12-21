@@ -66,6 +66,7 @@ public class StudentClient {
     private void readFilesInformation() {
         studentService.connect();
         ResponseAllListForm responseAllListForm = studentService.readFileListInServer();
+        System.out.println("!1111111");
         outputAgent.printSharedFolder(responseAllListForm);
     }
 

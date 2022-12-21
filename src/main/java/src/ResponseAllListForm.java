@@ -1,8 +1,9 @@
 package src;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ResponseAllListForm {
+public class ResponseAllListForm implements Serializable {
 
     List<ExtractedContent> extractedContents;
 

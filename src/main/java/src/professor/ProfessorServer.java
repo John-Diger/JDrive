@@ -61,8 +61,8 @@ public class ProfessorServer {
                 } else if (requestForm.getMethod().equals(Method.GET_LIST)) {
                     try {
                         objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-                        ResponseAllListForm all = professorRepository.findAll();
-                        objectOutputStream.writeObject(all);
+                        // ResponseAllListForm all = professorRepository.findAll();
+                        objectOutputStream.writeObject(new ResponseAllListForm());
                         objectOutputStream.flush();
                         printWriter.write("ok");
                         printWriter.close();
