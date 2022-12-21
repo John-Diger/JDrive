@@ -1,6 +1,6 @@
 package src.professor;
 
-import src.JavaBeanFactory;
+import src.ConnectionManager;
 import src.professor.entity.Bucket;
 
 import java.sql.Date;
@@ -16,7 +16,7 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     @Override
     public void insert(Bucket bucket) {
         final String query = "INSERT INTO bucket(shared_file, created_at, modified_at, status) VALUES(?,?,?,?)";
-        try (PreparedStatement preparedStatement = JavaBeanFactory.getConnection().prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
             preparedStatement.setBlob(1, bucket.getSharedFile());
             preparedStatement.setDate(2, new Date(System.currentTimeMillis()));
             preparedStatement.setDate(3, new Date(System.currentTimeMillis()));
@@ -31,7 +31,7 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     public List<Bucket> findAll() {
         List<Bucket> result = new ArrayList<>();
         String query = "SELECT * FROM bucket";
-        try (PreparedStatement preparedStatement = JavaBeanFactory.getConnection().prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery(query);
             while (resultSet.next()) {
                 Bucket loaded = new Bucket();
@@ -54,7 +54,7 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     public Bucket findById(long id) {
         Bucket bucket = new Bucket();
         String query = "SELECT * FROM bucket WHERE id = ?";
-        try (PreparedStatement preparedStatement = JavaBeanFactory.getConnection().prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
             ResultSet resultSet;
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery(query);
