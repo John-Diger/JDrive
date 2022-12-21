@@ -5,9 +5,9 @@ import java.util.List;
 public class OutputAgent {
 
     public void printInputGuideDownloadOrUpload() {
-        System.out.println("교수님과 연결되었습니다. 공유 폴더에 파일을 업로드 할 것인지, 다운로드 할 것인지 입력해주세요)");
+        System.out.println("교수님과 연결되었습니다. 공유 폴더에 파일을 업로드 할 것인지, 다운로드 할 것인지 입력해주세요");
         System.out.println("업로드 : u");
-        System.out.println("다운로드 : d");
+        System.out.print("다운로드 : d : ");
     }
 
     public void printUploadGuide() {

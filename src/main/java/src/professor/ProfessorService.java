@@ -16,10 +16,8 @@ public class ProfessorService {
         this.outputAgent = outputAgent;
         this.professorRepository = professorRepository;
     }
-//
-//    public
-//
-//    public File executeDownload() {
-//
-//    }
+
+    public File executeDownload(long id, String userDownloadPath) {
+        return professorRepository.findById(id).getSharedFile();
+    }
 }

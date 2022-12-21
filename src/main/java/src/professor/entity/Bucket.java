@@ -1,15 +1,31 @@
 package src.professor.entity;
 
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 public class Bucket {
 
     private long id;
-    private Blob sharedFile;
+    private String name;
+    private byte[] sharedFile;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean status;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public byte[] getSharedFile() {
+        return sharedFile;
+    }
+
+    public void setSharedFile(byte[] sharedFile) {
+        this.sharedFile = sharedFile;
+    }
 
     public long getId() {
         return id;
@@ -17,14 +33,6 @@ public class Bucket {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Blob getSharedFile() {
-        return sharedFile;
-    }
-
-    public void setSharedFile(Blob sharedFile) {
-        this.sharedFile = sharedFile;
     }
 
     public LocalDateTime getCreatedAt() {
