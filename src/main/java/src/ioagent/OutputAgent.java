@@ -17,7 +17,7 @@ public class OutputAgent {
         System.out.print("업로드 할 파일의 절대 경로를 입력해주세요 : ");
     }
 
-    public void printSharedFolder(ResponseForm responseForm, int filesLength) {
+    public void printSharedFolder(ResponseForm responseForm) {
         System.out.println("\n                  [!] 공유 폴더 내 파일 목록을 불러옵니다. [!]\n");
         System.out.println("| INDEX |                                | FilePath |");
         List<ExtractedContent> extractedContents = responseForm.getExtractedContents();

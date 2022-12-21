@@ -12,10 +12,12 @@ import java.net.Socket;
 
 import src.Method;
 import src.RequestForm;
+import src.ioagent.OutputAgent;
 
 public class ProfessorServer {
 
      private final ProfessorRepository professorRepository = new ProfessorRepositoryImpl();
+    private final OutputAgent outputAgent = new OutputAgent();
 
     ObjectInputStream objectInputStream; // Class의 객체를 읽어올때 사용
     PrintWriter printWriter; // 값을 전달할때 사용
@@ -59,7 +61,9 @@ public class ProfessorServer {
                     System.out.println("사용자 업로드 요청 처리 중" + requestForm.getMethod());
                     professorRepository.insert(requestForm.getData());
                     System.out.println("업로드 완료" + requestForm.getMethod());
-                } else if (requestForm.getMethod().equals(Method.DOWNLOAD)) {
+                }
+                else if (requestForm.getMethod().equals(Method.DOWNLOAD)) {
+                    outputAgent.printSharedFolder(professorRepository.findAll());
                     System.out.println("사용자 다운로드 요청 처리 중" + requestForm.getMethod());
                     professorRepository.findById((Long) requestForm.getData());
                     System.out.println("다운로드 완료" + requestForm.getMethod());

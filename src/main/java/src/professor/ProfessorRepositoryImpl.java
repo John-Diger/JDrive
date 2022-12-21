@@ -2,6 +2,8 @@ package src.professor;
 
 import org.apache.commons.io.FileUtils;
 import src.ConnectionManager;
+import src.ExtractedContent;
+import src.ResponseForm;
 import src.professor.entity.Bucket;
 
 import java.io.File;
@@ -33,26 +35,25 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public List<Bucket> findAll() {
-        List<Bucket> result = new ArrayList<>();
+    public ResponseForm findAll() {
+        ResponseForm responseForm = new ResponseForm();
+        List<ExtractedContent> extractedContents = new ArrayList<>();
         String query = "SELECT * FROM bucket";
         try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery(query);
             while (resultSet.next()) {
-                Bucket loaded = new Bucket();
-                loaded.setId(resultSet.getLong("id"));
-                loaded.setSharedFile(resultSet.getBytes("shared_file"));
-                loaded.setCreatedAt(resultSet.getDate("created_at").toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime());
-                loaded.setStatus(resultSet.getBoolean("status"));
-                result.add(loaded);
+                ExtractedContent extractedContent = new ExtractedContent();
+                extractedContent.setId(resultSet.getLong("id"));
+                extractedContent.setName(resultSet.getString("name"));
+                extractedContents.add(extractedContent);
                 resultSet.close();
             }
+            responseForm.setExtractedContents(extractedContents);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return result;
+        responseForm.setExtractedContents(extractedContents);
+        return responseForm;
     }
 
     @Override
