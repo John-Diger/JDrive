@@ -1,8 +1,10 @@
 package src.student;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import src.ExtractedContent;
 import src.Method;
 import src.RequestForm;
 import src.ResponseAllListForm;
@@ -63,10 +65,10 @@ public class StudentClient {
 
     private void readFilesInformation() {
         studentService.connect();
-        RequestForm requestForm = studentService.readFileListInServer();
-        ResponseAllListForm responseAllListForm = (ResponseAllListForm)requestForm.getData();
+        ResponseAllListForm responseAllListForm = studentService.readFileListInServer();
         outputAgent.printSharedFolder(responseAllListForm);
     }
+
     private void download() {
         outputAgent.printInputGuideRequestFile();
         String input = inputAgent.execute();

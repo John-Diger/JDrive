@@ -2,6 +2,7 @@ package src.student;
 
 import src.Method;
 import src.RequestForm;
+import src.ResponseAllListForm;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -25,7 +26,7 @@ public class StudentService {
 
     }
 
-    public RequestForm readFileListInServer() {
+    public ResponseAllListForm readFileListInServer() {
         try {
             objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             // Client 로부터 객체를 읽어오는 역할을 하는 객체를 생성
@@ -35,7 +36,8 @@ public class StudentService {
             objectOutputStream.flush(); // 직렬화된 데이터 전달
 
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
-            RequestForm responseForm = (RequestForm) objectInputStream.readObject(); // readObject는 object 객체로 불러오기 때문에 형변화해야 합니다.
+            ResponseAllListForm responseForm = (ResponseAllListForm) objectInputStream.readObject();
+            // readObject는 object 객체로 불러오기 때문에 형변화해야 합니다.
             System.out.println(responseForm.toString());
 
             printWriter.write("ok");
