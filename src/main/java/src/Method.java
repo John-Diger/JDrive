@@ -1,7 +1,7 @@
 package src;
 
 public enum Method {
-	UPLOAD("u"), DOWNLOAD("d");
+	UPLOAD("u"), DOWNLOAD("d"), GET_LIST("g");
 
 	private String command;
 

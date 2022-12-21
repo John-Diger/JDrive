@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import src.Method;
+import src.RequestForm;
+import src.ResponseForm;
 import src.ioagent.InputAgent;
 import src.ioagent.InputValidator;
 import src.ioagent.OutputAgent;
@@ -46,7 +48,7 @@ public class StudentClient {
             studentClient.upload();
             System.out.println("success");
         } else if (method.equals(Method.DOWNLOAD)) {
-            studentClient.download();
+            studentClient.readFilesInformation();
         }
 
     }
@@ -68,11 +70,16 @@ public class StudentClient {
         studentService.uploadProcess(absolutePath);
     }
 
-    private void download() {
-        // outputAgent.printSharedFolder();
-        outputAgent.printInputGuideRequestFile();
-        String absolutePath = inputAgent.execute();
-        studentService.uploadProcess(absolutePath);
+    private void readFilesInformation() {
+        studentService.connect();
+        RequestForm requestForm = studentService.readFileListInServer();
+        ResponseForm responseForm = (ResponseForm)requestForm.getData();
+        outputAgent.printSharedFolder(responseForm);
     }
-
+    private void download() {
+        outputAgent.printInputGuideRequestFile();
+        String input = inputAgent.execute();
+        // Long index = inputValidator.convertInputToLong(input);
+        return;
+    }
 }

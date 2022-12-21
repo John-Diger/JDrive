@@ -30,7 +30,7 @@ public class StudentService {
             objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             // Client 로부터 객체를 읽어오는 역할을 하는 객체를 생성
 
-            RequestForm requestForm = new RequestForm(Method.DOWNLOAD);
+            RequestForm requestForm = new RequestForm(Method.GET_LIST);
             objectOutputStream.writeObject(requestForm); // 데이터 직렬화
             objectOutputStream.flush(); // 직렬화된 데이터 전달
 
