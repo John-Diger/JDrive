@@ -2,7 +2,9 @@ package src;
 
 import src.professor.entity.Bucket;
 
-public class ResponseSpecificContentForm {
+import java.io.Serializable;
+
+public class ResponseSpecificContentForm implements Serializable {
 
     Bucket bucket;
 }

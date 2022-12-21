@@ -9,6 +9,6 @@ public class ConnectionManager {
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/jdrive", "root", "password");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/jdrive", "root", "112233");
     }
 }

@@ -46,13 +46,12 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
                 extractedContent.setId(resultSet.getLong("id"));
                 extractedContent.setName(resultSet.getString("name"));
                 extractedContents.add(extractedContent);
-                resultSet.close();
             }
             responseAllListForm.setExtractedContents(extractedContents);
+        resultSet.close();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        responseAllListForm.setExtractedContents(extractedContents);
         return responseAllListForm;
     }
 
