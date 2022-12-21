@@ -17,7 +17,7 @@ public class ProfessorService {
         this.professorRepository = professorRepository;
     }
 
-    public File executeDownload(long id, String userDownloadPath) {
-        return professorRepository.findById(id).getSharedFile();
-    }
+    // public File executeDownload(long id, String userDownloadPath) {
+    //     return professorRepository.findById(id).getSharedFile();
+    // }
 }
