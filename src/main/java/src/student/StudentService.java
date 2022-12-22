@@ -1,17 +1,17 @@
 package src.student;
 
-import src.ExtractedContent;
 import src.Method;
 import src.RequestForm;
 import src.ResponseAllListForm;
+import src.ResponseSpecificContentForm;
 
 import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class StudentService {
 
@@ -21,12 +21,20 @@ public class StudentService {
 
     PrintWriter printWriter; // 값을 전달할때 사용
 
+    FileWriter fileWriter;
+
     public void connect() {
         connectServerSocket();
     }
 
-    public void downloadProcess() {
-
+    public void downloadProcess(String path, Long index) {
+        ResponseSpecificContentForm responseSpecificContentForm = downloadByIndex(index);
+        Path savePath = Path.of(path);
+        try {
+            Files.write(savePath, responseSpecificContentForm.getBucket().getSharedFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ResponseAllListForm readFileListInServer() {
@@ -39,35 +47,44 @@ public class StudentService {
             objectOutputStream.flush(); // 직렬화된 데이터 전달
 
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
-            // List<ExtractedContent> list = new ArrayList<>();
-            // while (true) {
-            //     try {
-            //         ExtractedContent content = (ExtractedContent)objectInputStream.readObject();
-            //         list.add(content);
-            //     } catch (EOFException e) {
-            //         break;
-            //     }
-            // }
-            // System.out.println("list size : " + list.size());
 
             // printWriter.write("ok");
             // printWriter.close(); // close() or flush()를 해줘야지 전해진다
-           // 여기서 socket 접속이 끊어져야 클라이언트가 종료가 됩니다.
 
             ResponseAllListForm form = (ResponseAllListForm)objectInputStream.readObject();
-            // ResponseAllListForm responseAllListForm = new ResponseAllListForm();
-            // responseAllListForm.setExtractedContents(list);
-            clientSocket.close();
-            objectInputStream.close();
+
             objectOutputStream.close();
+            objectInputStream.close();
+            // clientSocket.close();
             return form;
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCause());
             throw new RuntimeException();
-
         }
+    }
 
+    public ResponseSpecificContentForm downloadByIndex(Long index) {
+        try {
+            objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            // Client 로부터 객체를 읽어오는 역할을 하는 객체를 생성
+
+            RequestForm requestForm = new RequestForm(Method.DOWNLOAD, index);
+            objectOutputStream.writeObject(requestForm); // 데이터 직렬화
+            objectOutputStream.flush(); // 직렬화된 데이터 전달
+
+            objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
+
+            // printWriter.write("ok");
+            // printWriter.close(); // close() or flush()를 해줘야지 전해진다
+
+            ResponseSpecificContentForm form = (ResponseSpecificContentForm)objectInputStream.readObject();
+
+            objectOutputStream.close();
+            objectInputStream.close();
+            clientSocket.close();
+            return form;
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException();
+        }
     }
 
     public void uploadProcess(String path) {
@@ -93,6 +110,7 @@ public class StudentService {
             BufferedReader bufferReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             RequestForm requestForm = new RequestForm(Method.UPLOAD, file);
+
             objectOutputStream.writeObject(requestForm); // 데이터 직렬화
             objectOutputStream.flush(); // 직렬화된 데이터 전달
 

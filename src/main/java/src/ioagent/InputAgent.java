@@ -15,7 +15,7 @@ public class InputAgent {
         return scanner.nextLine();
     }
 
-    public Long executeLong(String inputValue, int numberOfFile) {
-        return inputValidator.convertInputToLong(inputValue, numberOfFile);
+    public Long executeLong(String inputValue) {
+        return inputValidator.convertInputToLong(inputValue);
     }
 }
