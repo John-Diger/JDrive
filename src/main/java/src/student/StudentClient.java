@@ -42,7 +42,7 @@ public class StudentClient {
             System.out.println("success");
         } else if (method.equals(Method.DOWNLOAD)) {
             studentClient.readFilesInformation();
-
+            studentClient.download();
         }
 
     }
@@ -77,6 +77,5 @@ public class StudentClient {
         String input = inputAgent.execute();
         Long index = inputValidator.convertInputToLong(input);
         studentService.downloadProcess(absolutePath, index);
-
     }
 }
