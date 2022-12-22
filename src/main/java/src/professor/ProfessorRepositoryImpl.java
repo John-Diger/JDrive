@@ -48,7 +48,7 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
                 extractedContents.add(extractedContent);
             }
             responseAllListForm.setExtractedContents(extractedContents);
-        resultSet.close();
+            resultSet.close();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

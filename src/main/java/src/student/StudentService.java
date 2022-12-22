@@ -40,23 +40,25 @@ public class StudentService {
 
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
             List<ExtractedContent> list = new ArrayList<>();
-            try {
-                ExtractedContent content = (ExtractedContent)objectInputStream.readObject();
-                list.add(content);
-            } catch (EOFException e) {
-                System.out.println("111");
+            while (true) {
+                try {
+                    ExtractedContent content = (ExtractedContent)objectInputStream.readObject();
+                    list.add(content);
+                } catch (EOFException e) {
+                    break;
+                }
             }
-
             // printWriter.write("ok");
             // printWriter.close(); // close() or flush()를 해줘야지 전해진다
-            clientSocket.close(); // 여기서 socket 접속이 끊어져야 클라이언트가 종료가 됩니다.
+           // 여기서 socket 접속이 끊어져야 클라이언트가 종료가 됩니다.
 
             ResponseAllListForm responseAllListForm = new ResponseAllListForm();
             responseAllListForm.setExtractedContents(list);
+            clientSocket.close();
+            objectInputStream.close();
+            objectOutputStream.close();
             return responseAllListForm;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 

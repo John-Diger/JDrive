@@ -1,6 +1,8 @@
 package src;
 
-public class ExtractedContent {
+import java.io.Serializable;
+
+public class ExtractedContent implements Serializable {
 
     Long id;
     String name;
