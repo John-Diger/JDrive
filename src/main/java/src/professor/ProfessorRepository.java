@@ -1,6 +1,7 @@
 package src.professor;
 
 import src.ResponseAllListForm;
+import src.ResponseSpecificContentForm;
 
 import java.io.IOException;
 
@@ -9,5 +10,5 @@ public interface ProfessorRepository {
 
     ResponseAllListForm findAll();
 
-    ResponseAllListForm findById(long id);
+    ResponseSpecificContentForm findById(long id) throws Exception;
 }

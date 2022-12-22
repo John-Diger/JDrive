@@ -1,16 +1,16 @@
 package src.student;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import src.ExtractedContent;
 import src.Method;
-import src.RequestForm;
 import src.ResponseAllListForm;
 import src.ioagent.InputAgent;
 import src.ioagent.InputValidator;
 import src.ioagent.OutputAgent;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class StudentClient {
     // 학생들은 이 메서드를 실행시켜 교수님과 소켓 연결을 하고
@@ -20,6 +20,8 @@ public class StudentClient {
     InputValidator inputValidator;
     OutputAgent outputAgent;
     StudentService studentService;
+    OutputStream outputStream;
+    InputStream inputStream;
 
     public StudentClient() {
         this.inputValidator = new InputValidator();
@@ -28,14 +30,13 @@ public class StudentClient {
         this.studentService = new StudentService();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         StudentClient studentClient = new StudentClient();
         studentClient.outputAgent.printInputGuideDownloadOrUpload();
         String command = studentClient.inputAgent.execute();
         studentClient.inputValidator.userCommand(command);
 
         Method method = studentClient.getMethod(command);
-
 
         if (method.equals(Method.UPLOAD)) {
             studentClient.upload();
@@ -44,13 +45,12 @@ public class StudentClient {
             studentClient.readFilesInformation();
             studentClient.download();
         }
-
     }
 
-    private Method getMethod(String command) {
+    Method getMethod(String command) {
         Optional<Method> optionalMethod = Arrays.stream(Method.values())
-            .filter(method -> method.getCommand().equals(command))
-            .findFirst();
+                .filter(method -> method.getCommand().equals(command))
+                .findFirst();
         if (optionalMethod.isPresent()) {
             return optionalMethod.get();
         }
@@ -64,10 +64,20 @@ public class StudentClient {
         studentService.uploadProcess(absolutePath);
     }
 
-    private void readFilesInformation() {
+    void readFilesInformation() {
         studentService.connect();
         ResponseAllListForm responseAllListForm = studentService.readFileListInServer();
         outputAgent.printSharedFolder(responseAllListForm);
+    }
+
+    void readFilesStorePathGuide() throws IOException {
+        studentService.connect();
+        System.out.println(inputStream.read());
+    }
+
+    void readFilesIndexGuide() throws IOException {
+        studentService.connect();
+        System.out.println(inputStream.read());
     }
 
     private void download() {

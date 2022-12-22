@@ -1,10 +1,8 @@
 package src.professor;
 
-import src.ExtractedContent;
 import src.Method;
 import src.RequestForm;
 import src.ResponseAllListForm;
-import src.ioagent.OutputAgent;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -15,14 +13,12 @@ import java.net.Socket;
 public class ProfessorServer {
 
     private final ProfessorRepository professorRepository = new ProfessorRepositoryImpl();
-    private final OutputAgent outputAgent = new OutputAgent();
-
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream; // Class의 객체를 읽어올때 사용
     PrintWriter printWriter; // 값을 전달할때 사용
     ServerSocket serverSocket;
-
     Socket clientSocket;
+    ProfessorService professorService;
 
     // 교수님은 이 메서드를 실행시켜놓으면 학생들의 소켓접근을 허용하고
     // 학생들의 요청/응답에 따라 알맞는 처리를 해준다.
@@ -32,7 +28,6 @@ public class ProfessorServer {
         professorServer.acceptClientSocket();
         professorServer.stopServer();
     }
-
 
     public void stopServer() {
         try {
@@ -45,11 +40,10 @@ public class ProfessorServer {
 
     public void acceptClientSocket() {
         while (true) {
+
             try {
                 clientSocket = serverSocket.accept();
-                System.out.println("Accept...");
-
-                System.out.println("after socket connect");
+                System.out.println("신규 사용자와 연결되었습니다.");
                 printWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
 
                 // Client 로부터 객체를 읽어오는 역활을 하는 객체를 생성
@@ -61,12 +55,27 @@ public class ProfessorServer {
                     System.out.println("업로드 완료" + requestForm.getMethod());
                 } else if (requestForm.getMethod().equals(Method.GET_LIST)) {
                     try {
+                        // 파일 목록 내려주기
                         objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
                         ResponseAllListForm all = professorRepository.findAll();
-                        // for (ExtractedContent extractedContent : all.getExtractedContents()) {
-                        //     objectOutputStream.writeObject(extractedContent);
-                        // }
                         objectOutputStream.writeObject(all);
+
+//                    BufferedReader bufferReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//
+//                    objectOutputStream.writeObject("파일을 저장할 절대 경로를 입력해주세요 : ");
+//                    objectOutputStream.flush();
+//
+//                    String path;
+//                    while (bufferReader.readLine() == null) {
+//                        path = bufferReader.readLine();
+//                        System.out.println("path : " + path);
+//                    }
+//
+//                    objectOutputStream.writeObject("다운로드 받을 파일의 인덱스를 입력해주세요 : ");
+//                    objectOutputStream.flush();
+//                    // 파일 인덱스 입력받기
+//                    long index = Long.parseLong(bufferReader.readLine());
+//                    System.out.println("indxe : " + index);
 
                         objectOutputStream.flush();
                         printWriter.write("ok");
@@ -76,10 +85,7 @@ public class ProfessorServer {
                         throw new RuntimeException(e);
                     }
                 }
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }

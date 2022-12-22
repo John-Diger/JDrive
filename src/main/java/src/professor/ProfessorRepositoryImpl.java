@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import src.ConnectionManager;
 import src.ExtractedContent;
 import src.ResponseAllListForm;
+import src.ResponseSpecificContentForm;
 import src.professor.entity.Bucket;
 
 import java.io.File;
@@ -56,25 +57,24 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public ResponseAllListForm findById(long id) {
+    public ResponseSpecificContentForm findById(long id) throws Exception {
         Bucket bucket = new Bucket();
-        ResponseAllListForm responseAllListForm = new ResponseAllListForm();
-        ExtractedContent extractedContent = new ExtractedContent();
-        String query = "SELECT * FROM bucket WHERE id = ?";
+        ResponseSpecificContentForm responseSpecificContentForm = new ResponseSpecificContentForm();
+        String query = "SELECT * FROM bucket WHERE id = " + id;
         try (PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(query)) {
             ResultSet resultSet;
-            preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery(query);
-            bucket.setId(resultSet.getLong("id"));
-            bucket.setSharedFile(resultSet.getBytes("shared_file"));
-            bucket.setCreatedAt(resultSet.getDate("created_at").toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDateTime());
-            bucket.setStatus(resultSet.getBoolean("status"));
-            resultSet.close();
+            if (resultSet.next()) {
+                bucket.setId(resultSet.getLong("id"));
+                bucket.setSharedFile(resultSet.getBytes("shared_file"));
+                bucket.setName(resultSet.getString("name"));
+                responseSpecificContentForm.setBucket(bucket);
+                resultSet.close();
+                return responseSpecificContentForm;
+            }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return responseAllListForm;
+        throw new Exception("예기치 못한 오류 발생");
     }
 }

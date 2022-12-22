@@ -9,8 +9,7 @@ public class OutputAgent {
 
     public void printInputGuideDownloadOrUpload() {
         System.out.println("교수님과 연결되었습니다. 공유 폴더에 파일을 업로드 할 것인지, 다운로드 할 것인지 입력해주세요");
-        System.out.println("업로드 : u");
-        System.out.print("다운로드 : d : ");
+        System.out.print("입력 [업로드 : u, 다운로드 : d] : ");
     }
 
     public void printUploadGuide() {
@@ -22,13 +21,17 @@ public class OutputAgent {
     }
 
     public void printSharedFolder(ResponseAllListForm responseAllListForm) {
-        System.out.println("\n                  [!] 공유 폴더 내 파일 목록을 불러옵니다. [!]\n");
-        System.out.println("| INDEX |                                | FilePath |");
+        System.out.println("\n[!] 공유 폴더 내 파일 목록을 불러옵니다. [!]\n");
+        System.out.println("| INDEX | FileName |");
         List<ExtractedContent> extractedContents = responseAllListForm.getExtractedContents();
         for (int i = 0; i < extractedContents.size(); i++) {
-            System.out.println("| " + extractedContents.get(i).getId() + " | " + extractedContents.get(i).getName() + " | ");
-            System.out.println("-----");
+            System.out.println("|   " + extractedContents.get(i).getId() + "   | " + extractedContents.get(i).getName() + " | ");
+            System.out.println("---------");
         }
+    }
+
+    public void printInputGuideDownloadPath() {
+        System.out.print("파일을 저장할 절대경로를 입력해주세요 : ");
     }
 
     public void printInputGuideRequestFile() {

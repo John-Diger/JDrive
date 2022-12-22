@@ -1,18 +1,26 @@
 package src.professor;
 
+import src.Method;
+import src.RequestForm;
+import src.ResponseSpecificContentForm;
 import src.ioagent.InputAgent;
 import src.ioagent.OutputAgent;
+import src.professor.entity.Bucket;
+import src.student.StudentClient;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 
 public class ProfessorService {
 
     private final InputAgent inputAgent;
     private final OutputAgent outputAgent;
     private final ProfessorRepository professorRepository;
+    private ObjectInputStream objectInputStream;
+    ObjectOutputStream objectOutputStream;
+    private ByteArrayOutputStream byteArrayOutputStream;
+    private Socket clientSocket;
+    private StudentClient studentClient;
 
     public ProfessorService(InputAgent inputAgent, OutputAgent outputAgent, ProfessorRepository professorRepository) {
         this.inputAgent = inputAgent;
@@ -20,15 +28,19 @@ public class ProfessorService {
         this.professorRepository = professorRepository;
     }
 
-//    public File executeDownload(long id) {
-//        FileOutputStream fos = new FileOutputStream("pathname")
-//        try (FileOutputStream fos = new FileOutputStream("pathname")) {
-//            fos.write(professorRepository.findById(id).getSharedFile());
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return fos;
-//    }
+    public void executeDownload(String requestPath, long id) throws Exception {
+        ResponseSpecificContentForm byId = professorRepository.findById(id);
+        Bucket bucket = byId.getBucket();
+        try {
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byteArrayOutputStream.write(bucket.getSharedFile());
+            byteArrayOutputStream.flush();
+
+            byteArrayOutputStream.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
