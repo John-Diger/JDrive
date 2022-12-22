@@ -63,9 +63,11 @@ public class ProfessorServer {
                     try {
                         objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
                         ResponseAllListForm all = professorRepository.findAll();
-                        for (ExtractedContent extractedContent : all.getExtractedContents()) {
-                            objectOutputStream.writeObject(extractedContent);
-                        }
+                        // for (ExtractedContent extractedContent : all.getExtractedContents()) {
+                        //     objectOutputStream.writeObject(extractedContent);
+                        // }
+                        objectOutputStream.writeObject(all);
+
                         objectOutputStream.flush();
                         printWriter.write("ok");
                         printWriter.close();
