@@ -1,8 +1,9 @@
 package src.professor.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Bucket {
+public class Bucket implements Serializable {
 
     private long id;
     private String name;

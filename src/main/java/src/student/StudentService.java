@@ -4,6 +4,7 @@ import src.Method;
 import src.RequestForm;
 import src.ResponseAllListForm;
 import src.ResponseSpecificContentForm;
+import src.professor.entity.Bucket;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -12,6 +13,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class StudentService {
 
@@ -19,19 +21,25 @@ public class StudentService {
     ObjectOutputStream objectOutputStream;
     Socket clientSocket;
 
-    PrintWriter printWriter; // 값을 전달할때 사용
-
-    FileWriter fileWriter;
+    ByteArrayOutputStream byteArrayOutputStream;
 
     public void connect() {
         connectServerSocket();
     }
 
     public void downloadProcess(String path, Long index) {
+        connect();
         ResponseSpecificContentForm responseSpecificContentForm = downloadByIndex(index);
-        Path savePath = Path.of(path);
+        Bucket bucket = responseSpecificContentForm.getBucket();
+        Path savePath = Paths.get(path + bucket.getName());
+
         try {
-            Files.write(savePath, responseSpecificContentForm.getBucket().getSharedFile());
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byteArrayOutputStream.write(bucket.getSharedFile());
+            byteArrayOutputStream.flush();
+            Files.write(savePath, bucket.getSharedFile());
+            byteArrayOutputStream.close();
+            clientSocket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -55,7 +63,7 @@ public class StudentService {
 
             objectOutputStream.close();
             objectInputStream.close();
-            // clientSocket.close();
+            clientSocket.close();
             return form;
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException();
@@ -72,9 +80,6 @@ public class StudentService {
             objectOutputStream.flush(); // 직렬화된 데이터 전달
 
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
-
-            // printWriter.write("ok");
-            // printWriter.close(); // close() or flush()를 해줘야지 전해진다
 
             ResponseSpecificContentForm form = (ResponseSpecificContentForm)objectInputStream.readObject();
 

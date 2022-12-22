@@ -3,6 +3,7 @@ package src.professor;
 import src.Method;
 import src.RequestForm;
 import src.ResponseAllListForm;
+import src.ResponseSpecificContentForm;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -18,7 +19,6 @@ public class ProfessorServer {
     PrintWriter printWriter; // 값을 전달할때 사용
     ServerSocket serverSocket;
     Socket clientSocket;
-    ProfessorService professorService;
 
     // 교수님은 이 메서드를 실행시켜놓으면 학생들의 소켓접근을 허용하고
     // 학생들의 요청/응답에 따라 알맞는 처리를 해준다.
@@ -60,23 +60,6 @@ public class ProfessorServer {
                         ResponseAllListForm all = professorRepository.findAll();
                         objectOutputStream.writeObject(all);
 
-//                    BufferedReader bufferReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//
-//                    objectOutputStream.writeObject("파일을 저장할 절대 경로를 입력해주세요 : ");
-//                    objectOutputStream.flush();
-//
-//                    String path;
-//                    while (bufferReader.readLine() == null) {
-//                        path = bufferReader.readLine();
-//                        System.out.println("path : " + path);
-//                    }
-//
-//                    objectOutputStream.writeObject("다운로드 받을 파일의 인덱스를 입력해주세요 : ");
-//                    objectOutputStream.flush();
-//                    // 파일 인덱스 입력받기
-//                    long index = Long.parseLong(bufferReader.readLine());
-//                    System.out.println("indxe : " + index);
-
                         objectOutputStream.flush();
                         printWriter.write("ok");
                         printWriter.close();
@@ -84,8 +67,20 @@ public class ProfessorServer {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                } else if (requestForm.getMethod().equals(Method.DOWNLOAD)) {
+                    Long index = (Long)requestForm.getData();
+                    objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+                    ResponseSpecificContentForm form = professorRepository.findById(index);
+                    objectOutputStream.writeObject(form);
+
+                    objectOutputStream.flush();
+                    printWriter.write("ok");
+                    printWriter.close();
+                    clientSocket.close();
                 }
             } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

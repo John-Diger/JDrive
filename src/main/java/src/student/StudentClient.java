@@ -32,6 +32,7 @@ public class StudentClient {
 
     public static void main(String[] args) throws IOException {
         StudentClient studentClient = new StudentClient();
+
         studentClient.outputAgent.printInputGuideDownloadOrUpload();
         String command = studentClient.inputAgent.execute();
         studentClient.inputValidator.userCommand(command);
@@ -68,16 +69,6 @@ public class StudentClient {
         studentService.connect();
         ResponseAllListForm responseAllListForm = studentService.readFileListInServer();
         outputAgent.printSharedFolder(responseAllListForm);
-    }
-
-    void readFilesStorePathGuide() throws IOException {
-        studentService.connect();
-        System.out.println(inputStream.read());
-    }
-
-    void readFilesIndexGuide() throws IOException {
-        studentService.connect();
-        System.out.println(inputStream.read());
     }
 
     private void download() {
